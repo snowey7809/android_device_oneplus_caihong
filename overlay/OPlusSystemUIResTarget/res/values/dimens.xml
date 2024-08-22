@@ -6,10 +6,10 @@
 <resources>
 
     <!--  Allow CornerHandleView and PathSpecCornerPathRenderer to decouple from corner-radius -->
-    <dimen name="config_rounded_mask_size">156px</dimen>
+    <dimen name="config_rounded_mask_size">84px</dimen>
 
     <!-- the padding on the start of the statusbar -->
-    <dimen name="status_bar_padding_start">32px</dimen>
+    <dimen name="status_bar_padding_start">0px</dimen>
 
     <!-- the padding on the end of the statusbar -->
     <dimen name="status_bar_padding_end">24px</dimen>
@@ -21,6 +21,6 @@
     <dimen name="keyguard_carrier_text_margin">80px</dimen>
 
     <!-- Location on the screen of the center of the physical power button. -->
-    <dimen name="physical_power_button_center_screen_location_y">1000px</dimen>
+    <dimen name="physical_power_button_center_screen_location_y">1300px</dimen>
 
 </resources>
