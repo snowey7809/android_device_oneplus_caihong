@@ -165,22 +165,12 @@ odm/firmware/pxlw_vtdr6130_fhd_plus_vid.fw
 
 # Sensors config
 odm/etc/sensor/config/json_list
-odm/etc/sensor/config/lanai_mtp_ak09919.json
+odm/etc/sensor/config/lanai_bu52053nvx_0.json
 odm/etc/sensor/config/lanai_mtp_alsps.json
-odm/etc/sensor/config/lanai_mtp_alsps_hw_sip3627.json
-odm/etc/sensor/config/lanai_mtp_alsps_hw_tcs3720.json
-odm/etc/sensor/config/lanai_mtp_bmi26x.json
-odm/etc/sensor/config/lanai_mtp_bmp5_0.json
-odm/etc/sensor/config/lanai_mtp_cct_rear.json
+odm/etc/sensor/config/lanai_mtp_alsps_hw_tcs3701.json
 odm/etc/sensor/config/lanai_mtp_freefall.json
-odm/etc/sensor/config/lanai_mtp_icm4x6xx.json
-odm/etc/sensor/config/lanai_mtp_oplus_lay.json
-odm/etc/sensor/config/lanai_mtp_oplus_shaking.json
-odm/etc/sensor/config/lanai_mtp_oplus_smart_prox.json
-odm/etc/sensor/config/lanai_mtp_sx933x_0.json
-odm/etc/sensor/config/lanai_mtp_sx937x_0.json
-odm/etc/sensor/config/lux_aod.json
-odm/etc/sensor/config/waffle_qrd_ois_system.json
+odm/etc/sensor/config/lanai_mtp_icm4x607.json
+odm/etc/sensor/config/lanai_mtp_mmc56x3x.json
 odm/etc/sensor/sensor_config.json
 
 # Touchscreen firmware
