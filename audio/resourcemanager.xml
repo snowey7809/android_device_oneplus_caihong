@@ -44,14 +44,16 @@
         <param key="context_manager_enable" value ="true" />
         <param key="lpi_logging_enable" value ="false" />
         <param key="upd_dedicated_be" value ="false" />
+        <param key="upd_duty_cycle_enable" value="false" />
+        <param key="dual_mono" value ="false" />
         <param key="signal_handler" value ="true" />
         <param key="device_mux_config" value ="false" />
-        <param key="upd_duty_cycle_enable" value="false" />
         <param key="upd_virtual_port" value ="false" />
         <param key="haptics_priority" value ="touch_haptics" />
         <param key="haptics_through_wsa" value ="false" />
         <!-- Jie.Du@MULTIMEDIA.AUDIODRIVER.SMARTPA, 2021/06/22, add for engineermode test -->
         <param key="oplus_mic_count" value ="2" />
+        <param key="oplus_spk_count" value ="6" />
         <!-- YeWenliang@MULTIMEDIA.AUDIODRIVER, 2021/08/12, Add for mulit scene record -->
         <param key="oplus_multi_record" value="true"/>
         <!-- YeWenliang@MULTIMEDIA.AUDIODRIVER, 2021/08/12, Add for AP LVACFS -->
@@ -62,11 +64,9 @@
         <!-- YeWenliang@MULTIMEDIA.AUDIODRIVER, 2021/08/27, Add for smartpa power monitor -->
         <param key="support_smartpa_pm" value="true"/>
         <!-- Zhao.Pan@MULTIMEDIA.AUDIODRIVER.FEEDBACK, 2022/04/12, add for speaker err feedback -->
-        <param key="oplus_check_speaker" value="false"/>
+        <param key="oplus_check_speaker" value="true"/>
         <!-- Zhao.Pan@MULTIMEDIA.AUDIODRIVER.FEEDBACK, 2022/04/12, add for lvvefq err feedback -->
         <param key="oplus_lvve_err_fb" value="true"/>
-        <!-- YeWenliang@MULTIMEDIA.AUDIODRIVER, 2021/08/31, Add for ear protection -->
-        <param key="oplus_ear_protection_enable" value="true"/>
         <!-- YeWenliang@MULTIMEDIA.AUDIODRIVER, 2021/10/21, Add for power analysis -->
         <param key="power_analysis_enable" value="true"/>
         <!-- ZhaoShengtao@MULTIMEDIA.AUDIODRIVER, 2021/10/28, Add for audio abnormal detect -->
@@ -74,15 +74,22 @@
         <!-- liuhaituo@MULTIMEDIA.AUDIODRIVER, 2022/04/16, Add adsp ssr interfac start -->
         <param key="adsp_ssr_support" value="yes"/>
         <!-- Minyi.Hu@MULTIMEDIA.AUDIODRIVER, 2022/08/26, Add for tfa smart pa power control -->
-        <param key="lowbattery_speaker_profile_support" value="true"/>
-        <!-- Jie.Du@MULTIMEDIA.AUDIODRIVER, 2023/02/22, add for support call record in ocar mode -->
-        <param key="ocar_mode_support" value="true"/>
+        <param key="lowbattery_speaker_profile_support" value="false"/>
         <!-- Nan.Zhong@MULTIMEDIA.AUDIODRIVER.SMARTPA, 2023/04/28, add for speaker protection -->
         <param key="speaker_ringtone_ckv" value="true"/>
         <param key="speaker_voip_ckv" value="true"/>
-        <param key="speaker_auto_calibration" value="true"/>
-        <!-- YeWenliang@MULTIMEDIA.AUDIODRIVER, 2023/06/12, add for disable upd proximity -->
-        <param key="upd_proximity_enable" value ="false" />
+        <param key="speaker_auto_calibration" value="false"/>
+        <!-- Huangzilong@MULTIMEDIA.AUDIODRIVER, 2022/09/20, Add for 4ch aec -->
+        <param key="oplus_4ch_aec_enable" value="true"/>
+        <param key="oplus_ref_channel_count" value ="2" />
+        <!-- hongxiang.jin@MULTIMEDIA.AUDIODRIVER, 2024/01/25, Add for aw -->
+        <param key="oplus_speaker_id" value="3"/>
+        <!-- HuangLiang@MULTIMEDIA.AUDIODRIVER, 2024/03/05, Add for oplus tablet. -->
+        <param key="oplus_handset_support" value="false"/>
+        <!-- hongxiang.jin@MULTIMEDIA.AUDIODRIVER, 2024/03/11, add for support speaker swap channel -->
+        <param key="speaker_swap_channel_support" value="true"/>
+        <!-- XiongHu@MULTIMEDIA.AUDIODRIVER, 2024/06/06, Compensating for smartpa algorithm delays -->
+        <param key="speaker_extral_latency" value="40000"/>
     </config_params>
     <config_volume>
         <use_volume_set_param>1</use_volume_set_param>
@@ -90,7 +97,6 @@
             <supported_stream>PAL_STREAM_ULTRA_LOW_LATENCY</supported_stream>
             <supported_stream>PAL_STREAM_COMPRESSED</supported_stream>
             <supported_stream>PAL_STREAM_PCM_OFFLOAD</supported_stream>
-            <supported_stream>PAL_STREAM_VOIP_RX</supported_stream>
         </supported_streams>
     </config_volume>
     <config_lpm>
@@ -120,12 +126,14 @@
         <gain_level_map db="-10.2" level="2"/>
         <gain_level_map db="0" level="1"/>
     </gain_db_to_level_mapping>
-    <!-- Minyi.Hu@MULTIMEDIA.AUDIODRIVER, 2021/12/21, Add for SmartpaGainAdjust-->
-    <smartpa_gain_mapping>
-        <bat_to_dblvl_map battery="100" level="0"/>
-        <bat_to_dblvl_map battery="20" level="2"/>
-    </smartpa_gain_mapping>
-    <!-- Minyi.Hu@MULTIMEDIA.AUDIODRIVER, 2021/12/21, Add for SmartpaGainAdjust-->
+    <!-- jinhongxiang@MULTIMEDIA.AUDIODRIVER, 2024/03/11, add for support speaker swap channel -->
+    <smartpa_rotation_cmd_mapping>
+        <cmd_count>1</cmd_count>
+        <rotation_cmd_map fold_state="0" rotation="0" cmds="0x00"/>
+        <rotation_cmd_map fold_state="0" rotation="90" cmds="0x00"/>
+        <rotation_cmd_map fold_state="0" rotation="180" cmds="0x02"/>
+        <rotation_cmd_map fold_state="0" rotation="270" cmds="0x02"/>
+    </smartpa_rotation_cmd_mapping>
     <config_voice>
         <vsid>0xB3000000</vsid>
         <loopbackDelay>1000</loopbackDelay>
@@ -274,10 +282,6 @@
                 <name>PAL_STREAM_VOIP_TX</name>
                 <priority>2</priority>
                 <ec_enable>1</ec_enable>
-                <custom-config key="HAC">
-                    <channels>2</channels>
-                    <snd_device_name>voice-dmic-ef-hac</snd_device_name>
-                </custom-config>
             </usecase>
             <usecase>
                 <name>PAL_STREAM_VOICE_CALL</name>
@@ -305,10 +309,6 @@
                     <channels>4</channels>
                     <snd_device_name>quad-mic</snd_device_name>
                 </custom-config>
-                <custom-config key="HAC">
-                    <channels>2</channels>
-                    <snd_device_name>voice-dmic-ef-hac</snd_device_name>
-                </custom-config>
             </usecase>
             <usecase>
                 <name>PAL_STREAM_ULTRA_LOW_LATENCY</name>
@@ -320,6 +320,7 @@
                     <channels>2</channels>
                     <snd_device_name>handset-mic</snd_device_name>
                 </custom-config>
+
                 <custom-config key="normalrec-mic">
                     <channels>2</channels>
                     <snd_device_name>handset-mic</snd_device_name>
@@ -343,6 +344,12 @@
                 <custom-config key="unprocessed-hdr-mic-inverted-portrait">
                     <channels>4</channels>
                     <snd_device_name>unprocessed-hdr-mic-inverted-portrait</snd_device_name>
+                </custom-config>
+            </usecase>
+            <usecase>
+                <name>PAL_STREAM_VOICE_RECOGNITION</name>
+                <custom-config key="4ch-aec-mic">
+                    <ec_enable>1</ec_enable>
                 </custom-config>
             </usecase>
             <ec_rx_device>
@@ -397,6 +404,22 @@
                     <channels>2</channels>
                     <snd_device_name>speaker-mic</snd_device_name>
                 </custom-config>
+		<custom-config key="main-mic-record">
+			<channels>1</channels>
+			<snd_device_name>main-mic-test</snd_device_name>
+		</custom-config>
+		<custom-config key="sec-mic-record">
+			<channels>1</channels>
+			<snd_device_name>sec-mic-test</snd_device_name>
+		</custom-config>
+		<custom-config key="mmi-stero-mic-record">
+			<channels>2</channels>
+			<snd_device_name>mmi-mic-record</snd_device_name>
+		</custom-config>
+		<custom-config key="mmi-seal-mic-record">
+			<channels>2</channels>
+			<snd_device_name>mmi-mic-seal-record</snd_device_name>
+		</custom-config>
             </usecase>
         <!--Uncomment these lines instead of above lines if needing to enable EC per custom key
             <usecase>
@@ -703,7 +726,7 @@
         </in-device>
         <in-device>
             <id>PAL_DEVICE_IN_FM_TUNER</id>
-            <back_end_name>MI2S-LPAIF-TX-SECONDARY</back_end_name>
+            <back_end_name>TDM-LPAIF-TX-SECONDARY</back_end_name>
             <max_channels>2</max_channels>
             <channels>2</channels>
             <snd_device_name>play-fm</snd_device_name>
@@ -725,18 +748,18 @@
         </in-device>
         <in-device>
             <id>PAL_DEVICE_IN_VI_FEEDBACK</id>
-            <back_end_name>MI2S-LPAIF-TX-SECONDARY</back_end_name>
-            <max_channels>2</max_channels>
-            <channels>2</channels>
+            <back_end_name>TDM-LPAIF-TX-SECONDARY</back_end_name>
+            <max_channels>8</max_channels>
+            <channels>8</channels>
             <samplerate>48000</samplerate>
             <bit_width>32</bit_width>
             <snd_device_name>vi-feedback</snd_device_name>
         </in-device>
         <in-device>
             <id>PAL_DEVICE_IN_CPS_FEEDBACK</id>
-            <back_end_name>MI2S-LPAIF-TX-SECONDARY</back_end_name>
-            <max_channels>2</max_channels>
-            <channels>2</channels>
+            <back_end_name>TDM-LPAIF-TX-SECONDARY</back_end_name>
+            <max_channels>4</max_channels>
+            <channels>4</channels>
             <samplerate>24000</samplerate>
             <bit_width>32</bit_width>
             <snd_device_name>cps-feedback</snd_device_name>
@@ -802,7 +825,8 @@
         </in-device>
         <in-device>
             <id>PAL_DEVICE_IN_EXT_EC_REF</id>
-            <back_end_name>MI2S-LPAIF-TX-TERTIARY</back_end_name>
+            <!-- The below back_end_name is for internal testing purpose only, needs to be modified to appropriate value if TDM/MI2S -->
+            <back_end_name>TDM-LPAIF-TX-SECONDARY</back_end_name>
             <snd_device_name>ext_ec_ref_tx</snd_device_name>
             <max_channels>2</max_channels>
             <channels>2</channels>
@@ -844,11 +868,11 @@
         </out-device>
         <out-device>
             <id>PAL_DEVICE_OUT_SPEAKER</id>
-            <back_end_name>MI2S-LPAIF-RX-SECONDARY</back_end_name>
-            <max_channels>2</max_channels>
-            <channels>2</channels>
+            <back_end_name>TDM-LPAIF-RX-SECONDARY</back_end_name>
+            <max_channels>8</max_channels>
+            <channels>8</channels>
             <samplerate>48000</samplerate>
-            <bit_width>24</bit_width>
+            <bit_width>32</bit_width>
             <snd_device_name>speaker</snd_device_name>
             <speaker_protection_enabled>1</speaker_protection_enabled>
             <fractional_sr>0</fractional_sr>
@@ -866,7 +890,7 @@
             <!--e.g <supported_bit_format >PAL_AUDIO_FMT_PCM_S24_LE</supported_bit_format>-->
             <!--We support 24 bit for speaker as of now, as some module in ADSP does not support Q31 format-->
             <!--This can be changed to PAL_AUDIO_FMT_PCM_S32_LE if 32 bit e2e support is required-->
-            <supported_bit_format>PAL_AUDIO_FMT_PCM_S24_LE</supported_bit_format>
+            <supported_bit_format>PAL_AUDIO_FMT_PCM_S32_LE</supported_bit_format>
             <!-- RAS should be enabled with speaker protection always -->
             <ras_enabled>0</ras_enabled>
             <!-- Flag to specify speaker in case Voice call is switched from
@@ -881,13 +905,11 @@
             <usecase>
                 <name>PAL_STREAM_VOICE_CALL</name>
                 <priority>1</priority>
-                <channels>2</channels>
                 <snd_device_name>speaker</snd_device_name>
             </usecase>
             <usecase>
                 <name>PAL_STREAM_VOIP_RX</name>
-                <priority>2</priority>
-                <channels>2</channels>
+                <priority>3</priority>
                 <snd_device_name>speaker</snd_device_name>
             </usecase>
             <usecase>
@@ -897,23 +919,62 @@
             </usecase>
             <usecase>
                 <name>PAL_STREAM_LOW_LATENCY</name>
-                <custom-config key="left-speaker-playback">
-                    <snd_device_name>mmi-speaker-left</snd_device_name>
+                <custom-config key="speaker-1-playback">
+                    <snd_device_name>mmi-speaker-left-top</snd_device_name>
                 </custom-config>
-                <custom-config key="right-speaker-playback">
-                    <snd_device_name>mmi-speaker-right</snd_device_name>
+                <custom-config key="speaker-2-playback">
+                    <snd_device_name>mmi-speaker-left-bottom</snd_device_name>
+                </custom-config>
+                <custom-config key="speaker-3-playback">
+                    <snd_device_name>mmi-speaker-right-top</snd_device_name>
+                </custom-config>
+                <custom-config key="speaker-4-playback">
+                    <snd_device_name>mmi-speaker-right-bottom</snd_device_name>
+                </custom-config>
+                <custom-config key="speaker-5-playback">
+                    <snd_device_name>mmi-speaker-left-high</snd_device_name>
+                </custom-config>
+                <custom-config key="speaker-6-playback">
+                    <snd_device_name>mmi-speaker-right-high</snd_device_name>
+                </custom-config>
+                <custom-config key="left-speaker-playback">
+                    <snd_device_name>left-speaker-playback</snd_device_name>
+                </custom-config>
+            </usecase>
+            <usecase>
+                <name>PAL_STREAM_DEEP_BUFFER</name>
+                <custom-config key="speaker-1-playback">
+                    <snd_device_name>mmi-speaker-left-top</snd_device_name>
+                </custom-config>
+                <custom-config key="speaker-2-playback">
+                    <snd_device_name>mmi-speaker-left-bottom</snd_device_name>
+                </custom-config>
+                <custom-config key="speaker-3-playback">
+                    <snd_device_name>mmi-speaker-right-top</snd_device_name>
+                </custom-config>
+                <custom-config key="speaker-4-playback">
+                    <snd_device_name>mmi-speaker-right-bottom</snd_device_name>
+                </custom-config>
+                <custom-config key="speaker-5-playback">
+                    <snd_device_name>mmi-speaker-left-high</snd_device_name>
+                </custom-config>
+                <custom-config key="speaker-6-playback">
+                    <snd_device_name>mmi-speaker-right-high</snd_device_name>
+                </custom-config>
+                <custom-config key="left-speaker-playback">
+                    <snd_device_name>left-speaker-playback</snd_device_name>
                 </custom-config>
             </usecase>
         </out-device>
         <out-device>
             <id>PAL_DEVICE_OUT_HANDSET</id>
-            <back_end_name>MI2S-LPAIF-RX-SECONDARY</back_end_name>
-            <max_channels>2</max_channels>
-            <channels>2</channels>
+            <back_end_name>TDM-LPAIF-RX-SECONDARY</back_end_name>
+            <max_channels>8</max_channels>
+            <channels>8</channels>
             <!-- To enable external EC reference the flag extec_ref_enabled must be added as 1 -->
             <ext_ec_ref_enabled>0</ext_ec_ref_enabled>
             <samplerate>48000</samplerate>
-            <bit_width>24</bit_width>
+            <bit_width>32</bit_width>
             <fractional_sr>0</fractional_sr>
             <snd_device_name>handset</snd_device_name>
             <handset_protection_enabled>0</handset_protection_enabled>
@@ -927,7 +988,7 @@
           </usecase>
           <usecase>
               <name>PAL_STREAM_VOIP_RX</name>
-              <priority>2</priority>
+              <priority>3</priority>
               <custom-config key="HAC">
                  <snd_device_name>handset</snd_device_name> <!-- override sound device name with HAC handset for voip -->
               </custom-config>
@@ -941,6 +1002,18 @@
               <name>PAL_STREAM_LOW_LATENCY</name>
               <custom-config key="receiver-playback">
                   <snd_device_name>mmi-receiver</snd_device_name>
+              </custom-config>
+          </usecase>
+          <usecase>
+              <name>PAL_STREAM_LOW_LATENCY</name>
+              <custom-config key="receiver-l-playback">
+                  <snd_device_name>mmi-receiver-l</snd_device_name>
+              </custom-config>
+          </usecase>
+          <usecase>
+              <name>PAL_STREAM_LOW_LATENCY</name>
+              <custom-config key="receiver-r-playback">
+                  <snd_device_name>mmi-receiver-r</snd_device_name>
               </custom-config>
           </usecase>
           <usecase>
@@ -1229,6 +1302,14 @@
                 </policies>
         </in_stream>
         <in_stream>
+            <name>PAL_STREAM_VOICE_RECOGNITION</name>
+                <policies>
+                    <ec_ref>
+                        <disabled_stream>PAL_STREAM_GENERIC</disabled_stream>
+                    </ec_ref>
+                </policies>
+        </in_stream>
+        <in_stream>
             <name>PAL_STREAM_VOICE_UI</name>
                 <policies>
                     <ec_ref>
@@ -1484,6 +1565,13 @@
                 <param snd_name="va-mic-dmic" />
                 <param ec_ref="true" />
             </capture_profile>
+            <capture_profile name="DUAL_MIC_48KHZ_16BIT_BREENO_ECNS">
+                <param sample_rate="48000" />
+                <param channels="2" />
+                <param bit_width="16" />
+                <param snd_name="va-mic-dmic" />
+                <param ec_ref="true" />
+            </capture_profile>
             <capture_profile name="TRI_MIC_16KHZ_16BIT_FFECNS">
                 <param sample_rate="16000" />
                 <param channels="3" />
@@ -1620,6 +1708,7 @@
         </capture_profile_list>
         <acd_platform_info>
             <config>
+                <!-- YeWenliang@MULTIMEDIA.AUDIODRIVER, 2023/06/12, disable acd -->
                 <param acd_enable="false" />
             </config>
             <!-- ACD -->
@@ -1859,6 +1948,41 @@
                         <param module_type="CUSTOM1" />
                         <param load_sound_model_ids="0xC0000008, 0x0800104C" />
                         <param custom_config_ids="0xC0000008, 0x08001049" />
+                        <param buffering_config_ids="0xC0000008, 0x08001044" />
+                        <param engine_reset_ids="0xC0000008, 0x08001051" />
+                    </first_stage_module_params>
+                </sound_model_info>
+            </stream_config>
+            <!-- Breeno Voice UI-->
+            <stream_config>
+                <name>BREENO_VOICE_UI</name>
+                <!-- NOTE: Customer need to replace with their own uuid and match with sound model -->
+                <param vendor_uuid="68ac2d41-e861-11e4-95ed-0002a5d5c51c" />
+                <param interface_plugin_lib="libcustomva_intf.so" />
+                <param merge_first_stage_sound_models="false" />
+                <!-- Profile specific data which the algorithm can support -->
+                <param capture_keyword="2000" /> <!-- Default history buffer length -->
+                <param client_capture_read_delay="2000" /> <!-- reserved buffer duration for rt data -->
+                <param pre_roll_duration="500" /> <!-- Default preroll duration -->
+                <!-- durations in us -->
+                <param kw_start_tolerance="360000" />
+                <param kw_end_tolerance="240000" />
+                <param data_before_kw_start="360000" />
+                <param data_after_kw_end="480000" />
+                <param sample_rate="16000" />
+                <param bit_width="16" />
+                <!-- Module output channels -->
+                <param out_channels="2" />
+                <operating_modes>
+                    <low_power capture_profile_handset="DUAL_MIC_16KHZ_16BIT_RAW_LPI" capture_profile_headset="SINGLE_MIC_16KHZ_16BIT_HEADSET_CUSTOM_NS" />
+                    <high_performance capture_profile_handset="DUAL_MIC_48KHZ_16BIT_BREENO_ECNS" capture_profile_headset="SINGLE_MIC_48KHZ_16BIT_HEADSET_CUSTOM_ECNS" />
+                    <high_performance_and_charging capture_profile_handset="DUAL_MIC_48KHZ_16BIT_BREENO_ECNS" capture_profile_headset="SINGLE_MIC_48KHZ_16BIT_HEADSET_CUSTOM_ECNS" />
+                </operating_modes>
+                <sound_model_info>
+                    <first_stage_module_params>
+                        <param module_type="CUSTOM1" />
+                        <param load_sound_model_ids="0xC0000008, 0x0800104C" />
+                        <param custom_config_ids="0xC0000008, 0x0800119B" />
                         <param buffering_config_ids="0xC0000008, 0x08001044" />
                         <param engine_reset_ids="0xC0000008, 0x08001051" />
                     </first_stage_module_params>

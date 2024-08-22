@@ -5,9 +5,9 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/lineage_waffle.mk
+    $(LOCAL_DIR)/lineage_caihong.mk
 
 COMMON_LUNCH_CHOICES := \
-    lineage_waffle-user \
-    lineage_waffle-userdebug \
-    lineage_waffle-eng
+    lineage_caihong-user \
+    lineage_caihong-userdebug \
+    lineage_caihong-eng
